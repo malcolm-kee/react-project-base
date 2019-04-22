@@ -1,8 +1,8 @@
 {
   "name": "react-project-base",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Configuration for react projects",
+  "private": true,
   "scripts": {
     "start": "webpack-dev-server --mode=\"development\" --open",
     "build": "webpack --mode=\"development\"",
@@ -12,6 +12,10 @@
   "keywords": [],
   "author": "Malcolm Kee <malcolm.keeweesiong@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/malcolm-kee/react-project-base"
+  },
   "dependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
