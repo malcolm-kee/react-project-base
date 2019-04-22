@@ -1,35 +1,42 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 const webpack = require('webpack');
+const webpackMerge = require('webpack-merge');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const modeConfig = env => require(`./build-config/webpack.${env.mode}.config.js`)(env);
 
-module.exports = {
-  entry: './src',
-  output: {
-    publicPath: '/'
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx|ts|tsx)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader']
+const outputPath = path.resolve(__dirname, 'dist');
+
+module.exports = ({ mode = 'production' } = {}) => {
+  return webpackMerge(
+    {
+      mode,
+      entry: './src',
+      output: {
+        path: outputPath,
+        publicPath: '/'
       },
-      {
-        test: /\.(scss|css)$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
-      }
-    ]
-  },
-  resolve: {
-    extensions: ['*', '.js', '.jsx', '.ts', '.tsx']
-  },
-  devServer: {
-    port: 9200,
-    hot: true
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: 'src/index.html'
-    }),
-    new webpack.HotModuleReplacementPlugin()
-  ]
+      module: {
+        rules: [
+          {
+            test: /\.(js|jsx|ts|tsx)$/,
+            exclude: /node_modules/,
+            use: ['babel-loader']
+          }
+        ]
+      },
+      resolve: {
+        extensions: ['*', '.js', '.jsx', '.ts', '.tsx']
+      },
+      plugins: [
+        new CleanWebpackPlugin({
+          verbose: true
+        }),
+        new HtmlWebpackPlugin({
+          template: 'src/index.html'
+        })
+      ]
+    },
+    modeConfig({ mode })
+  );
 };
