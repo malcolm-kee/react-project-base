@@ -170,6 +170,7 @@ function App() {
                       required
                     />
                     <Divider />
+                    <h2>Loan Details</h2>
                     <TextField
                       label="Loan Amount"
                       value={values.loadAmount}
