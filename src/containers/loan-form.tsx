@@ -2,6 +2,7 @@ import { Button, Form, Select, Spin, Steps } from 'antd';
 import { Formik } from 'formik';
 import * as React from 'react';
 import { Field } from '../components/field';
+import { ImageUpload } from '../components/image-upload';
 import { Input, InputGroup } from '../components/input';
 import { TextField } from '../components/text-field';
 import { Toolbar } from '../components/toolbar';
@@ -181,6 +182,38 @@ function LoanDetails({ values, handleChange }: any) {
   );
 }
 
+function SupportingDocuments({ setFieldValue }: any) {
+  return (
+    <div>
+      <h2>Supporting Documents</h2>
+      <Field label="Photocopy of ID (IC / Passport)">
+        <ImageUpload
+          max={1}
+          onFileChange={filePaths => setFieldValue('icImage', filePaths[0] || '')}
+        />
+      </Field>
+      <Field label="Photocopy of driving license">
+        <ImageUpload
+          max={1}
+          onFileChange={filePaths => setFieldValue('licenseImage', filePaths[0] || '')}
+        />
+      </Field>
+      <Field label="Pay slip (for last 3 months)">
+        <ImageUpload
+          max={3}
+          onFileChange={filePaths => setFieldValue('salarySlipFor3MonthsImages', filePaths)}
+        />
+      </Field>
+      <Field label="Saving account statements (for last 3 months)">
+        <ImageUpload
+          max={3}
+          onFileChange={filePaths => setFieldValue('savingStatementsFor3MonthsImages', filePaths)}
+        />
+      </Field>
+    </div>
+  );
+}
+
 const initialValues = {
   name: '',
   id: '',
@@ -200,8 +233,8 @@ const initialValues = {
   tenure: '',
   icImage: '',
   licenseImage: '',
-  salarySlipFor3MonthsImages: '',
-  savingStatementsFor3MonthsImages: ''
+  salarySlipFor3MonthsImages: [],
+  savingStatementsFor3MonthsImages: []
 };
 
 function useStepper(initialStep = 0) {
@@ -231,12 +264,13 @@ function LoanForm() {
           <Step title="Employment" />
           <Step title="Loan" />
           <Step title="Supporting Documents" />
+          <Step title="Result" />
         </Steps>
       </Toolbar>
       <Formik
         initialValues={initialValues}
         onSubmit={values => {
-          if (step === 3) {
+          if (step === 4) {
             displaySuccessText(`This is the value: ${JSON.stringify(values, null, 2)}`);
           } else {
             next();
@@ -254,21 +288,18 @@ function LoanForm() {
             )}
             {step === 1 && <EmploymentDetails values={values} handleChange={handleChange} />}
             {step === 2 && <LoanDetails values={values} handleChange={handleChange} />}
-            {step === 3 && (
+            {step === 3 && <SupportingDocuments setFieldValue={setFieldValue} />}
+            {step === 4 && (
               <div>
-                Coming Soon
-                <Spin />
+                <h2>Application Result</h2>
+                <p>
+                  Coming soon <Spin />
+                </p>  
               </div>
             )}
-            {/* 
-Image input: IC
-Image input: Driving license
-Image or PDF input: 3 months salary slip
-Image or PDF input: 3 months saving accounts statement
-*/}
             <Toolbar justifyContent="space-between" flexFlow="row-reverse">
               <Button type="primary" htmlType="submit">
-                {step === 3 ? 'Submit' : 'Next'}
+                {step === 4 ? 'Submit' : 'Next'}
               </Button>
               {step > 0 && (
                 <Button onClick={prev} htmlType="button">
