@@ -1,4 +1,4 @@
-const getStorage = () => import('./storage');
+const getStorage = () => import(/* webpackChunkName: "storage" */ './storage');
 
 export const uploadImage = (imageName: string, file: File) =>
   getStorage().then(({ uploadImage }) => uploadImage(imageName, file));

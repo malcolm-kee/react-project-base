@@ -10,7 +10,7 @@ import { States } from '../constants/lov';
 
 const Step = Steps.Step;
 
-const getMessage = () => import('../components/message');
+const getMessage = () => import(/* webpackChunkName: "message" */ '../components/message');
 
 const displaySuccessText = (text: string) =>
   getMessage().then(({ default: message }) => message.success(text));
@@ -294,7 +294,7 @@ function LoanForm() {
                 <h2>Application Result</h2>
                 <p>
                   Coming soon <Spin />
-                </p>  
+                </p>
               </div>
             )}
             <Toolbar justifyContent="space-between" flexFlow="row-reverse">
