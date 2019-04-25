@@ -11,6 +11,9 @@ const Step = Steps.Step;
 
 const getMessage = () => import('../components/message');
 
+const displaySuccessText = (text: string) =>
+  getMessage().then(({ default: message }) => message.success(text));
+
 function PersonalDetails({ values, handleChange, setFieldValue }: any) {
   return (
     <>
@@ -234,9 +237,7 @@ function LoanForm() {
         initialValues={initialValues}
         onSubmit={values => {
           if (step === 3) {
-            getMessage().then(({ default: message }) =>
-              message.success(`This is the value: ${JSON.stringify(values, null, 2)}`)
-            );
+            displaySuccessText(`This is the value: ${JSON.stringify(values, null, 2)}`);
           } else {
             next();
           }
