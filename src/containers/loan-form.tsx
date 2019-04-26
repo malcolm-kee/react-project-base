@@ -1,17 +1,18 @@
-import { Button, Form, Select, Spin, Steps } from "antd";
-import { Formik } from "formik";
-import * as React from "react";
-import { Field } from "../components/field";
-import { ImageUpload } from "../components/image-upload";
-import { Input, InputGroup } from "../components/input";
-import { TextField } from "../components/text-field";
-import { Toolbar } from "../components/toolbar";
-import { States } from "../constants/lov";
+import { Button, Form, Select, Spin, Steps } from 'antd';
+import { Formik } from 'formik';
+import * as React from 'react';
+import { Field } from '../components/field';
+import { ImageUpload } from '../components/image-upload';
+import { Input, InputGroup } from '../components/input';
+import { TextField } from '../components/text-field';
+import { Toolbar } from '../components/toolbar';
+import { States } from '../constants/lov';
+import { FormValues } from '../constants/type';
 
 const Step = Steps.Step;
 
 const getMessage = () =>
-  import(/* webpackChunkName: "message" */ "../components/message");
+  import(/* webpackChunkName: "message" */ '../components/message');
 
 const displaySuccessText = (text: string) =>
   getMessage().then(({ default: message }) => message.success(text));
@@ -20,14 +21,6 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
   return (
     <>
       <h2>Personal Details</h2>
-      <Field label="Photocopy of ID (IC / Passport)">
-        <ImageUpload
-          max={1}
-          onFileChange={filePaths =>
-            setFieldValue("icImage", filePaths[0] || "")
-          }
-        />
-      </Field>
       <TextField
         label="Full Name"
         value={values.name}
@@ -70,7 +63,7 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
         <InputGroup compact>
           <Input
             value={values.postalCode}
-            style={{ width: "50%" }}
+            style={{ width: '50%' }}
             placeholder="Postal Code"
             name="postalCode"
             autoComplete="postal-code"
@@ -78,7 +71,7 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
           />
           <Input
             value={values.city}
-            style={{ width: "50%" }}
+            style={{ width: '50%' }}
             placeholder="City/Area"
             name="city"
             autoComplete="address-level2"
@@ -87,7 +80,7 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
         </InputGroup>
         <Select
           value={values.state}
-          onChange={val => setFieldValue("state", val)}
+          onChange={val => setFieldValue('state', val)}
           placeholder="State"
           showSearch
           optionFilterProp="children"
@@ -201,7 +194,7 @@ function SupportingDocuments({ setFieldValue }: any) {
         <ImageUpload
           max={1}
           onFileChange={filePaths =>
-            setFieldValue("icImage", filePaths[0] || "")
+            setFieldValue('icImage', filePaths[0] || '')
           }
         />
       </Field>
@@ -209,7 +202,7 @@ function SupportingDocuments({ setFieldValue }: any) {
         <ImageUpload
           max={1}
           onFileChange={filePaths =>
-            setFieldValue("licenseImage", filePaths[0] || "")
+            setFieldValue('licenseImage', filePaths[0] || '')
           }
         />
       </Field>
@@ -217,7 +210,7 @@ function SupportingDocuments({ setFieldValue }: any) {
         <ImageUpload
           max={3}
           onFileChange={filePaths =>
-            setFieldValue("salarySlipFor3MonthsImages", filePaths)
+            setFieldValue('salarySlipFor3MonthsImages', filePaths)
           }
         />
       </Field>
@@ -225,7 +218,7 @@ function SupportingDocuments({ setFieldValue }: any) {
         <ImageUpload
           max={3}
           onFileChange={filePaths =>
-            setFieldValue("savingStatementsFor3MonthsImages", filePaths)
+            setFieldValue('savingStatementsFor3MonthsImages', filePaths)
           }
         />
       </Field>
@@ -233,25 +226,25 @@ function SupportingDocuments({ setFieldValue }: any) {
   );
 }
 
-const initialValues = {
-  name: "",
-  id: "",
-  date: "",
-  addressLine1: "",
-  addressLine2: "",
-  addressLine3: "",
-  postalCode: "",
-  city: "",
-  state: "",
-  mobileNumber: "",
-  email: "",
-  company: "",
-  companyHrNumber: "",
-  salary: "",
-  loadAmount: "",
-  tenure: "",
-  icImage: "",
-  licenseImage: "",
+const initialValues: FormValues = {
+  name: '',
+  id: '',
+  date: '',
+  addressLine1: '',
+  addressLine2: '',
+  addressLine3: '',
+  postalCode: '',
+  city: '',
+  state: '',
+  mobileNumber: '',
+  email: '',
+  company: '',
+  companyHrNumber: '',
+  salary: '',
+  loadAmount: '',
+  tenure: '',
+  icImage: '',
+  licenseImage: '',
   salarySlipFor3MonthsImages: [],
   savingStatementsFor3MonthsImages: []
 };
@@ -326,7 +319,7 @@ function LoanForm() {
             )}
             <Toolbar justifyContent="space-between" flexFlow="row-reverse">
               <Button type="primary" htmlType="submit">
-                {step === 4 ? "Submit" : "Next"}
+                {step === 4 ? 'Submit' : 'Next'}
               </Button>
               {step > 0 && (
                 <Button onClick={prev} htmlType="button">
