@@ -2,9 +2,10 @@ interface CallBack<Params extends any[]> {
   (...args: Params): void;
 }
 
-export const callAll = <Params extends any[]>(...fns: Array<CallBack<Params> | undefined>) => (
-  ...args: Params
-) => fns.forEach(fn => typeof fn === 'function' && fn(...args));
+export const callAll = <Params extends any[]>(
+  ...fns: Array<CallBack<Params> | undefined>
+) => (...args: Params) =>
+  fns.forEach(fn => typeof fn === 'function' && fn(...args));
 
 export const createNumberArray = (length: number) => {
   const result: number[] = [];
@@ -13,3 +14,5 @@ export const createNumberArray = (length: number) => {
   }
   return result;
 };
+
+export function noop() {}

@@ -1,16 +1,17 @@
-import { Button, Form, Select, Spin, Steps } from 'antd';
-import { Formik } from 'formik';
-import * as React from 'react';
-import { Field } from '../components/field';
-import { ImageUpload } from '../components/image-upload';
-import { Input, InputGroup } from '../components/input';
-import { TextField } from '../components/text-field';
-import { Toolbar } from '../components/toolbar';
-import { States } from '../constants/lov';
+import { Button, Form, Select, Spin, Steps } from "antd";
+import { Formik } from "formik";
+import * as React from "react";
+import { Field } from "../components/field";
+import { ImageUpload } from "../components/image-upload";
+import { Input, InputGroup } from "../components/input";
+import { TextField } from "../components/text-field";
+import { Toolbar } from "../components/toolbar";
+import { States } from "../constants/lov";
 
 const Step = Steps.Step;
 
-const getMessage = () => import(/* webpackChunkName: "message" */ '../components/message');
+const getMessage = () =>
+  import(/* webpackChunkName: "message" */ "../components/message");
 
 const displaySuccessText = (text: string) =>
   getMessage().then(({ default: message }) => message.success(text));
@@ -19,6 +20,14 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
   return (
     <>
       <h2>Personal Details</h2>
+      <Field label="Photocopy of ID (IC / Passport)">
+        <ImageUpload
+          max={1}
+          onFileChange={filePaths =>
+            setFieldValue("icImage", filePaths[0] || "")
+          }
+        />
+      </Field>
       <TextField
         label="Full Name"
         value={values.name}
@@ -61,7 +70,7 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
         <InputGroup compact>
           <Input
             value={values.postalCode}
-            style={{ width: '50%' }}
+            style={{ width: "50%" }}
             placeholder="Postal Code"
             name="postalCode"
             autoComplete="postal-code"
@@ -69,7 +78,7 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
           />
           <Input
             value={values.city}
-            style={{ width: '50%' }}
+            style={{ width: "50%" }}
             placeholder="City/Area"
             name="city"
             autoComplete="address-level2"
@@ -78,12 +87,14 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
         </InputGroup>
         <Select
           value={values.state}
-          onChange={val => setFieldValue('state', val)}
+          onChange={val => setFieldValue("state", val)}
           placeholder="State"
           showSearch
           optionFilterProp="children"
           filterOption={(input, option) =>
-            (option.props.children as string).toLowerCase().indexOf(input.toLowerCase()) >= 0
+            (option.props.children as string)
+              .toLowerCase()
+              .indexOf(input.toLowerCase()) >= 0
           }
         >
           {States.map(state => (
@@ -189,25 +200,33 @@ function SupportingDocuments({ setFieldValue }: any) {
       <Field label="Photocopy of ID (IC / Passport)">
         <ImageUpload
           max={1}
-          onFileChange={filePaths => setFieldValue('icImage', filePaths[0] || '')}
+          onFileChange={filePaths =>
+            setFieldValue("icImage", filePaths[0] || "")
+          }
         />
       </Field>
       <Field label="Photocopy of driving license">
         <ImageUpload
           max={1}
-          onFileChange={filePaths => setFieldValue('licenseImage', filePaths[0] || '')}
+          onFileChange={filePaths =>
+            setFieldValue("licenseImage", filePaths[0] || "")
+          }
         />
       </Field>
       <Field label="Pay slip (for last 3 months)">
         <ImageUpload
           max={3}
-          onFileChange={filePaths => setFieldValue('salarySlipFor3MonthsImages', filePaths)}
+          onFileChange={filePaths =>
+            setFieldValue("salarySlipFor3MonthsImages", filePaths)
+          }
         />
       </Field>
       <Field label="Saving account statements (for last 3 months)">
         <ImageUpload
           max={3}
-          onFileChange={filePaths => setFieldValue('savingStatementsFor3MonthsImages', filePaths)}
+          onFileChange={filePaths =>
+            setFieldValue("savingStatementsFor3MonthsImages", filePaths)
+          }
         />
       </Field>
     </div>
@@ -215,24 +234,24 @@ function SupportingDocuments({ setFieldValue }: any) {
 }
 
 const initialValues = {
-  name: '',
-  id: '',
-  date: '',
-  addressLine1: '',
-  addressLine2: '',
-  addressLine3: '',
-  postalCode: '',
-  city: '',
-  state: '',
-  mobileNumber: '',
-  email: '',
-  company: '',
-  companyHrNumber: '',
-  salary: '',
-  loadAmount: '',
-  tenure: '',
-  icImage: '',
-  licenseImage: '',
+  name: "",
+  id: "",
+  date: "",
+  addressLine1: "",
+  addressLine2: "",
+  addressLine3: "",
+  postalCode: "",
+  city: "",
+  state: "",
+  mobileNumber: "",
+  email: "",
+  company: "",
+  companyHrNumber: "",
+  salary: "",
+  loadAmount: "",
+  tenure: "",
+  icImage: "",
+  licenseImage: "",
   salarySlipFor3MonthsImages: [],
   savingStatementsFor3MonthsImages: []
 };
@@ -271,7 +290,9 @@ function LoanForm() {
         initialValues={initialValues}
         onSubmit={values => {
           if (step === 4) {
-            displaySuccessText(`This is the value: ${JSON.stringify(values, null, 2)}`);
+            displaySuccessText(
+              `This is the value: ${JSON.stringify(values, null, 2)}`
+            );
           } else {
             next();
           }
@@ -286,9 +307,15 @@ function LoanForm() {
                 setFieldValue={setFieldValue}
               />
             )}
-            {step === 1 && <EmploymentDetails values={values} handleChange={handleChange} />}
-            {step === 2 && <LoanDetails values={values} handleChange={handleChange} />}
-            {step === 3 && <SupportingDocuments setFieldValue={setFieldValue} />}
+            {step === 1 && (
+              <EmploymentDetails values={values} handleChange={handleChange} />
+            )}
+            {step === 2 && (
+              <LoanDetails values={values} handleChange={handleChange} />
+            )}
+            {step === 3 && (
+              <SupportingDocuments setFieldValue={setFieldValue} />
+            )}
             {step === 4 && (
               <div>
                 <h2>Application Result</h2>
@@ -299,7 +326,7 @@ function LoanForm() {
             )}
             <Toolbar justifyContent="space-between" flexFlow="row-reverse">
               <Button type="primary" htmlType="submit">
-                {step === 4 ? 'Submit' : 'Next'}
+                {step === 4 ? "Submit" : "Next"}
               </Button>
               {step > 0 && (
                 <Button onClick={prev} htmlType="button">

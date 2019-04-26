@@ -1,19 +1,26 @@
 import 'firebase/storage';
 import { firebase } from './firebase';
+import { noop } from '../lib/fn';
 
 const storage = firebase.storage().ref();
 
 const imageStorage = storage.child('images');
 
-export const uploadImage = (imageName: string, file: File): Promise<string> =>
+export const uploadImage = (
+  imageName: string,
+  file: File,
+  onProgress: (percent: number) => void = noop
+): Promise<string> =>
   new Promise((fulfill, reject) => {
     const uploadTask = imageStorage.child(imageName).put(file);
 
     uploadTask.on(
       'state_changed',
       function(snapshot) {
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
+        onProgress(progress);
         switch (snapshot.state) {
           case firebase.storage.TaskState.PAUSED: // or 'paused'
             console.log('Upload is paused');

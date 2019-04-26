@@ -23,7 +23,9 @@ export const ImageUpload: React.FC<IImageUploadProps> = ({
 }) => {
   const [fileList, setFileList] = React.useState<UploadFile[]>([]);
   const [filePaths, setFilePaths] = React.useState<string[]>([]);
-  const [previewImgSrc, setPreviewImgSrc] = React.useState<string | undefined>();
+  const [previewImgSrc, setPreviewImgSrc] = React.useState<
+    string | undefined
+  >();
 
   const addFilePath = (filePath: string) =>
     setFilePaths(prevFilePaths => prevFilePaths.concat(filePath));
@@ -35,17 +37,33 @@ export const ImageUpload: React.FC<IImageUploadProps> = ({
   return (
     <div className="clearfix">
       <Upload
-        action={file => uploadImage(file.name, file as any).then(addFilePath)}
+        beforeUpload={file => {
+          uploadImage(file.name, file as any).then(filePath => {
+            addFilePath(filePath);
+          });
+          return false;
+        }}
+        fileList={fileList}
         listType="picture-card"
         onChange={({ fileList }) => setFileList(fileList)}
         onPreview={file => setPreviewImgSrc(file.url || file.thumbUrl)}
         onRemove={file => removeImage(file.name) as any}
         accept="image/*"
       >
-        {max && fileList.length >= max ? null : <UploadButton>{uploadBtnText}</UploadButton>}
+        {max && fileList.length >= max ? null : (
+          <UploadButton>{uploadBtnText}</UploadButton>
+        )}
       </Upload>
-      <Modal visible={!!previewImgSrc} footer={null} onCancel={() => setPreviewImgSrc(undefined)}>
-        <img alt="preview upload" src={previewImgSrc} style={{ width: '100%' }} />
+      <Modal
+        visible={!!previewImgSrc}
+        footer={null}
+        onCancel={() => setPreviewImgSrc(undefined)}
+      >
+        <img
+          alt="preview upload"
+          src={previewImgSrc}
+          style={{ width: '100%' }}
+        />
       </Modal>
     </div>
   );
