@@ -1,4 +1,4 @@
-import { Button, Form, List, Select, Steps } from 'antd';
+import { Button, Form, List, Select, Steps, Icon } from 'antd';
 import { Formik } from 'formik';
 import * as React from 'react';
 import { Field } from '../components/field';
@@ -355,20 +355,34 @@ function LoanForm() {
           <Step title="Employment" />
           <Step title="Loan" />
           <Step title="Supporting Documents" />
-          <Step title="Result" />
+          <Step title="Summary" />
+          <Step title="Complete" />
         </Steps>
       </Toolbar>
       <Formik
         initialValues={initialValues}
-        onSubmit={values => {
+        onSubmit={(values, actions) => {
           if (step === 4) {
-            saveForm(values).then(() => displaySuccessText('Form submitted'));
+            saveForm(values)
+              .then(() => {
+                displaySuccessText('Form submitted');
+                next();
+                actions.setSubmitting(false);
+              })
+              .catch(() => actions.setSubmitting(false));
           } else {
             next();
+            actions.setSubmitting(false);
           }
         }}
       >
-        {({ handleSubmit, handleChange, values, setFieldValue }) => (
+        {({
+          handleSubmit,
+          handleChange,
+          values,
+          setFieldValue,
+          isSubmitting
+        }) => (
           <Form onSubmit={handleSubmit} layout="vertical" className="pad">
             {step === 0 && (
               <PersonalDetails
@@ -391,16 +405,32 @@ function LoanForm() {
               <SupportingDocuments setFieldValue={setFieldValue} />
             )}
             {step === 4 && <Summary values={values} />}
-            <Toolbar justifyContent="space-between" flexFlow="row-reverse">
-              <Button type="primary" htmlType="submit">
-                {step === 4 ? 'Submit' : 'Next'}
-              </Button>
-              {step > 0 && (
-                <Button onClick={prev} htmlType="button">
-                  Previous
+            {step === 5 && (
+              <div>
+                <h2>Submitted!</h2>
+                <Icon
+                  type="check-circle"
+                  style={{ color: 'green', fontSize: '3rem' }}
+                />
+                <p>Wait for our good news!</p>
+              </div>
+            )}
+            {step < 5 && (
+              <Toolbar justifyContent="space-between" flexFlow="row-reverse">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  disabled={isSubmitting}
+                >
+                  {step === 4 ? 'Submit' : 'Next'}
                 </Button>
-              )}
-            </Toolbar>
+                {step > 0 && (
+                  <Button onClick={prev} htmlType="button">
+                    Previous
+                  </Button>
+                )}
+              </Toolbar>
+            )}
           </Form>
         )}
       </Formik>
