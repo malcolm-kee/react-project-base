@@ -1,32 +1,36 @@
 'use strict';
 
 const functions = require('firebase-functions');
-const nodemailer = require('nodemailer');
+const { sendEmail } = require('./send-email');
+const { sendSms } = require('./send-sms');
 
-const gmailEmail = functions.config().gmail.email;
-const gmailPassword = functions.config().gmail.password;
-const mailTransport = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: gmailEmail,
-    pass: gmailPassword
-  }
-});
-
-exports.sendSubmissionEmail = functions.database
+exports.onNewForm = functions.database
   .ref('/forms/{formId}')
-  .onCreate(async function handleNewFormSubmission(change) {
+  .onCreate(async function handleNewForm(change) {
     const val = change.val();
-    console.log('in sendSubmissionEmail handler');
+    console.log('in handleNewForm handler');
     console.log(val);
+
+    if (val.mobileNumber) {
+      try {
+        await sendSms({
+          text: 'We receive your application',
+          sender: 'Smart Loan',
+          receiver: val.mobileNumber
+        });
+      } catch (e) {
+        console.error('Error when sendSms');
+        console.error(e);
+      }
+    }
 
     if (val && val.email) {
       try {
-        await mailTransport.sendEmail({
-          from: '"Smart Loan" <noreply@smartyloan.firebaseapp.com>',
-          to: val.email,
-          subject: 'Car Loan Submission Received',
-          text: 'Thanks!'
+        await sendEmail({
+          email: val.email,
+          subject: 'Smart Loan',
+          content: 'Hello from Smart Loan',
+          sender: 'noreply@team36.firebaseapp.com'
         });
       } catch (e) {
         console.error('Error when sendEmail');

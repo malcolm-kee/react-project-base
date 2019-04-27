@@ -1,12 +1,12 @@
 import * as firebaseApp from 'firebase/app';
 
 const config = {
-  apiKey: 'AIzaSyBbR6Ff0D0MzQcDvSfiPp4zuAIWgqKzTqc',
-  authDomain: 'smarty-loan.firebaseapp.com',
-  databaseURL: 'https://smarty-loan.firebaseio.com',
-  projectId: 'smarty-loan',
-  storageBucket: 'smarty-loan.appspot.com',
-  messagingSenderId: '900924052124'
+  apiKey: 'AIzaSyDfNajmdJ-Zjg_hcsEW5J632X0EW7X_cK8',
+  authDomain: 'team36.firebaseapp.com',
+  databaseURL: 'https://team36.firebaseio.com',
+  projectId: 'team36',
+  storageBucket: 'team36.appspot.com',
+  messagingSenderId: '341936962355'
 };
 
 firebaseApp.initializeApp(config);
