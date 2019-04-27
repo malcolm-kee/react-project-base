@@ -6,15 +6,19 @@ const { sendSms } = require('./send-sms');
 
 exports.onNewForm = functions.database
   .ref('/forms/{formId}')
-  .onCreate(async function handleNewForm(change) {
-    const val = change.val();
+  .onCreate(async function handleNewForm(snapshot, context) {
+    const val = snapshot.val();
+    const formId = context.params && context.params.formId;
     console.log('in handleNewForm handler');
-    console.log(val);
+    console.log({ formId, params: context.params });
 
     if (val.mobileNumber) {
       try {
         await sendSms({
-          text: 'We receive your application',
+          text:
+            'We receive your application' + formId
+              ? `View your loan status here: https://team36.firebaseapp.com/loan-status/${formId}`
+              : '',
           sender: 'L',
           receiver: val.mobileNumber
         });
@@ -35,8 +39,6 @@ exports.onNewForm = functions.database
             IC/Passport: ${val.id}
             Addresses: 
             ${val.addressLine1}
-            ${val.addressLine2}
-            ${val.addressLine3}
             ${val.postalCode} ${val.city}, ${val.state}
             Mobile: ${val.mobileNumber}
             Email: ${val.email || 'Not Provided'}

@@ -4,6 +4,11 @@ import { LoanApplication, LoanApproval } from '../constants/type';
 import { isNil } from '../lib/fn';
 import { formDb } from '../services/db';
 
+const displayText = (text: string) =>
+  import('../components/message').then(({ displaySuccessText }) =>
+    displaySuccessText(text)
+  );
+
 const getApprovalStatusText = (approval: LoanApproval | null) =>
   isNil(approval)
     ? ''
@@ -114,9 +119,12 @@ const ApprovalStatusOverview: React.FC<ApprovalStatusOverviewProps> = ({
       | 'mayBankApproval'
       | 'publicBankApproval'
   ) {
-    formDb.child(applicationId).update({
-      [`${approvalKey}/acceptedByCustomer`]: true
-    });
+    formDb
+      .child(applicationId)
+      .update({
+        [`${approvalKey}/acceptedByCustomer`]: true
+      })
+      .then(() => displayText('Loan Accepted!'));
   }
 
   React.useEffect(() => {
