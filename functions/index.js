@@ -71,13 +71,19 @@ exports.onNewForm = functions.database
             </tr>
             <tr>
               <td>IC Image:</td><td> ${
-                val.icImage ? `<img src="${val.icImage}" />` : 'Not Provided'
+                val.icImage
+                  ? `<table width="100%" style="max-width:400px;"><tr><td><img src="${
+                      val.icImage
+                    }" width="100%" /></td></tr></table>`
+                  : 'Not Provided'
               }</td>
             </tr>
             <tr>
               <td>License Image:</td><td> ${
                 val.licenseImage
-                  ? `<img src="${val.licenseImage}" />`
+                  ? `<table width="100%" style="max-width:400px;"><tr><td><img src="${
+                      val.licenseImage
+                    }" width="100%" /></td></tr></table>`
                   : 'Not Provided'
               }</td>
             </tr>
@@ -86,7 +92,10 @@ exports.onNewForm = functions.database
               val.salarySlipFor3MonthsImages.length > 0
                 ? `<tr><td colspan="2">Pay Slips</td></tr>
                 <tr><td colspan="2">${val.salarySlipFor3MonthsImages
-                  .map(imgSrc => `<img src="${imgSrc}" />`)
+                  .map(
+                    imgSrc =>
+                      `<table width="100%" style="max-width:400px;"><tr><td><img src="${imgSrc}" width="100%" /></td></tr></table>`
+                  )
                   .join('')}</td></tr>`
                 : ''
             }
@@ -95,7 +104,10 @@ exports.onNewForm = functions.database
               val.savingStatementsFor3MonthsImages.length > 0
                 ? `<tr><td colspan="2">Saving Account Statements</td></tr>
                 <tr><td colspan="2">${val.savingStatementsFor3MonthsImages
-                  .map(imgSrc => `<img src="${imgSrc}" />`)
+                  .map(
+                    imgSrc =>
+                      `<table width="100%" style="max-width:400px;"><tr><td><img src="${imgSrc}" width="100%" /></td></tr></table>`
+                  )
                   .join('')}</td></tr>`
                 : ''
             }
