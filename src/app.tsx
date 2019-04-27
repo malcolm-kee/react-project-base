@@ -2,9 +2,13 @@ import { Col, Layout, Row, Spin, PageHeader } from 'antd';
 import * as React from 'react';
 import { hot } from 'react-hot-loader/root';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
-const LoanForm = React.lazy(() => import('./containers/loan-form'));
+const LoanForm = React.lazy(() =>
+  import(/* webpackChunkName: "LoanForm" */ './containers/loan-form')
+);
 const BankApprovalForm = React.lazy(() =>
-  import('./containers/bank-approval-form')
+  import(
+    /* webpackChunkName: "BankApprovalForm" */ './containers/bank-approval-form'
+  )
 );
 
 function App() {

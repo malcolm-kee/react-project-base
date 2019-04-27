@@ -1,6 +1,6 @@
 import { Button, List } from 'antd';
 import * as React from 'react';
-import { getApprovalKey } from '../constants/mapping';
+import { getApprovalKey, getThemeStyles } from '../constants/mapping';
 import {
   Bank,
   LoanApplication,
@@ -23,8 +23,6 @@ const mapLoan = (
   } = application;
 
   const applicableApproval = application[getApprovalKey(bank)];
-
-  console.log({ applicableApproval });
 
   return {
     ...otherProps,
@@ -56,11 +54,10 @@ const BankApprovalForm: React.FC<IBankApprovalFormProps> = ({ bank }) => {
 
   return (
     <div>
-      <h1>Loan Approvals for {bank}</h1>
+      <h1 style={getThemeStyles(bank)}>Loan Approvals for {bank}</h1>
       <List renderItem={() => null}>
         {Object.keys(loans).map(key => {
           const loan = loans[key] && mapLoan(loans[key], bank);
-          console.log(loan);
           return loan ? (
             <Item
               actions={
