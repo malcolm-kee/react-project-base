@@ -4,34 +4,43 @@ import { LoanApplication, LoanApproval } from '../constants/type';
 import { isNil } from '../lib/fn';
 import { formDb } from '../services/db';
 
-const getApprovalStatusText = (approval: LoanApproval) =>
-  isNil(approval.approved)
+const getApprovalStatusText = (approval: LoanApproval | null) =>
+  isNil(approval)
+    ? ''
+    : isNil(approval.approved)
     ? 'Pending Review'
     : approval.approved
     ? 'Approved'
     : 'Rejected';
 
-const getApprovalStatusColor = (approval: LoanApproval) =>
-  isNil(approval.approved) ? undefined : approval.approved ? '#87d068' : 'red';
+const getApprovalStatusColor = (approval: LoanApproval | null) =>
+  isNil(approval) || isNil(approval.approved)
+    ? undefined
+    : approval.approved
+    ? '#87d068'
+    : 'red';
 
-const isApproved = (approval: LoanApproval) => !!approval.approved;
+const isApproved = (approval: LoanApproval | null) =>
+  !!(approval && approval.approved);
 
 const ApprovalStatusCard: React.FC<{
   bank: string;
-  approval: LoanApproval;
+  approval: LoanApproval | null;
   onAccept: () => void;
   isLoanAccepted: boolean;
 }> = ({ bank, approval, onAccept, isLoanAccepted }) => {
+  const isLoading = isNil(approval);
   const isLoanApproved = isApproved(approval);
-  const isAccepted = !!approval.acceptedByCustomer;
+  const isAccepted = !!(approval && approval.acceptedByCustomer);
 
   return (
     <Card
       title={bank}
+      loading={isLoading}
       extra={
         isLoanAccepted ? (
           isAccepted ? (
-            <Tag color="#87d068">Accepted</Tag>
+            <Tag color="#87d068">Selected</Tag>
           ) : null
         ) : (
           <Tag color={getApprovalStatusColor(approval)}>
@@ -49,7 +58,7 @@ const ApprovalStatusCard: React.FC<{
                     Accept <Icon type="check" />
                   </Button>
                 </span>
-              ) : isNil(approval.approved) ? (
+              ) : isNil(approval && approval.approved) ? (
                 <Button type="ghost" disabled>
                   Pending Review
                 </Button>
@@ -61,28 +70,30 @@ const ApprovalStatusCard: React.FC<{
             ]
       }
     >
-      <Row gutter={8}>
-        <Col sm={12} xs={24}>
-          <Statistic
-            title="Approved Amount"
-            value={isLoanApproved ? approval.approvedLoanAmount : 'N/A'}
-            prefix={isLoanApproved ? 'RM' : undefined}
-          />
-        </Col>
-        <Col sm={12} xs={24}>
-          <Statistic
-            title="Approved Tenure"
-            value={isLoanApproved ? approval.approvedTenure : 'N/A'}
-            suffix={
-              isLoanApproved
-                ? approval.approvedTenure > 1
-                  ? 'years'
-                  : 'year'
-                : undefined
-            }
-          />
-        </Col>
-      </Row>
+      {approval && (
+        <Row gutter={8}>
+          <Col sm={12} xs={24}>
+            <Statistic
+              title="Approved Amount"
+              value={isLoanApproved ? approval.approvedLoanAmount : 'N/A'}
+              prefix={isLoanApproved ? 'RM' : undefined}
+            />
+          </Col>
+          <Col sm={12} xs={24}>
+            <Statistic
+              title="Approved Tenure"
+              value={isLoanApproved ? approval.approvedTenure : 'N/A'}
+              suffix={
+                isLoanApproved
+                  ? approval.approvedTenure > 1
+                    ? 'years'
+                    : 'year'
+                  : undefined
+              }
+            />
+          </Col>
+        </Row>
+      )}
     </Card>
   );
 };
@@ -113,7 +124,6 @@ const ApprovalStatusOverview: React.FC<ApprovalStatusOverviewProps> = ({
       if (snapshot) {
         setLoan(snapshot.val());
       } else {
-        console.log('no snapshot');
         setLoan(null);
       }
     });
@@ -134,42 +144,40 @@ const ApprovalStatusOverview: React.FC<ApprovalStatusOverviewProps> = ({
   return (
     <div>
       <h2>Approval Overview</h2>
-      {loan && (
-        <Row gutter={8}>
-          <Col lg={8} md={12} xs={24}>
-            <ApprovalStatusCard
-              bank="Hong Leong Bank"
-              approval={loan.hongLeongBankApproval}
-              onAccept={() => handleAccept('hongLeongBankApproval')}
-              isLoanAccepted={isAccepted}
-            />
-          </Col>
-          <Col lg={8} md={12} xs={24}>
-            <ApprovalStatusCard
-              bank="CIMB Bank"
-              approval={loan.cimbBankApproval}
-              onAccept={() => handleAccept('cimbBankApproval')}
-              isLoanAccepted={isAccepted}
-            />
-          </Col>
-          <Col lg={8} md={12} xs={24}>
-            <ApprovalStatusCard
-              bank="Maybank"
-              approval={loan.mayBankApproval}
-              onAccept={() => handleAccept('mayBankApproval')}
-              isLoanAccepted={isAccepted}
-            />
-          </Col>
-          <Col lg={8} md={12} xs={24}>
-            <ApprovalStatusCard
-              bank="Public Bank"
-              approval={loan.publicBankApproval}
-              onAccept={() => handleAccept('publicBankApproval')}
-              isLoanAccepted={isAccepted}
-            />
-          </Col>
-        </Row>
-      )}
+      <Row gutter={8}>
+        <Col lg={8} md={12} xs={24}>
+          <ApprovalStatusCard
+            bank="Hong Leong Bank"
+            approval={loan && loan.hongLeongBankApproval}
+            onAccept={() => handleAccept('hongLeongBankApproval')}
+            isLoanAccepted={isAccepted}
+          />
+        </Col>
+        <Col lg={8} md={12} xs={24}>
+          <ApprovalStatusCard
+            bank="CIMB Bank"
+            approval={loan && loan.cimbBankApproval}
+            onAccept={() => handleAccept('cimbBankApproval')}
+            isLoanAccepted={isAccepted}
+          />
+        </Col>
+        <Col lg={8} md={12} xs={24}>
+          <ApprovalStatusCard
+            bank="Maybank"
+            approval={loan && loan.mayBankApproval}
+            onAccept={() => handleAccept('mayBankApproval')}
+            isLoanAccepted={isAccepted}
+          />
+        </Col>
+        <Col lg={8} md={12} xs={24}>
+          <ApprovalStatusCard
+            bank="Public Bank"
+            approval={loan && loan.publicBankApproval}
+            onAccept={() => handleAccept('publicBankApproval')}
+            isLoanAccepted={isAccepted}
+          />
+        </Col>
+      </Row>
     </div>
   );
 };
