@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack-dev-server --env.mode development --open",
     "build": "webpack --env.mode production",
-    "test": "jest"
+    "test": "jest",
+    "deploy": "npm run build && firebase deploy"
   },
   "keywords": [
     "react",

@@ -7,9 +7,9 @@ export const callAll = <Params extends any[]>(
 ) => (...args: Params) =>
   fns.forEach(fn => typeof fn === 'function' && fn(...args));
 
-export const createNumberArray = (length: number) => {
+export const createNumberArray = (length: number, startFrom = 0) => {
   const result: number[] = [];
-  for (let index = 0; index < length; index++) {
+  for (let index = startFrom; index < length; index++) {
     result.push(index);
   }
   return result;

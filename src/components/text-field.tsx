@@ -11,7 +11,11 @@ export const TextField: React.FC<ITextFieldProps> = ({
   validateStatus,
   ...inputProps
 }) => (
-  <Field label={label} validateStatus={validateStatus} required={inputProps.required}>
+  <Field
+    label={label}
+    validateStatus={validateStatus}
+    required={inputProps.required}
+  >
     <Input {...inputProps} />
   </Field>
 );

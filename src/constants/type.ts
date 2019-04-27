@@ -13,7 +13,8 @@ export interface FormValues {
   company: string;
   companyHrNumber: string;
   salary: string;
-  loadAmount: string;
+  carPrice: string;
+  downPayment: string;
   tenure: string;
   icImage: string;
   licenseImage: string;

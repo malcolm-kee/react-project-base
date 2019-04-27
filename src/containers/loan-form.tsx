@@ -8,6 +8,7 @@ import { TextField } from '../components/text-field';
 import { Toolbar } from '../components/toolbar';
 import { States } from '../constants/lov';
 import { FormValues } from '../constants/type';
+import { createNumberArray } from '../lib/fn';
 
 const Step = Steps.Step;
 
@@ -147,6 +148,7 @@ function EmploymentDetails({ values, handleChange }: any) {
         onChange={handleChange}
         name="salary"
         type="number"
+        addonBefore="RM"
         min="0"
         step="100"
         placeholder="3000"
@@ -156,32 +158,54 @@ function EmploymentDetails({ values, handleChange }: any) {
   );
 }
 
-function LoanDetails({ values, handleChange }: any) {
+function LoanDetails({
+  values,
+  handleChange,
+  setFieldValue
+}: {
+  values: FormValues;
+  handleChange: any;
+  setFieldValue: any;
+}) {
   return (
     <>
       <h2>Loan Details</h2>
       <TextField
-        label="Loan Amount"
-        value={values.loadAmount}
+        label="Car Price"
+        value={values.carPrice}
         onChange={handleChange}
-        name="loadAmount"
+        name="carPrice"
         type="number"
         min="0"
-        step="100"
+        step="1"
         placeholder="50000"
+        addonBefore="RM"
         required
-        autoFocus
+        autoFocus={!values.carPrice}
       />
       <TextField
-        label="Tenure (number of years)"
-        value={values.tenure}
+        label="Downpayment (min 10 % of car price)"
+        value={values.downPayment}
         onChange={handleChange}
-        name="tenure"
+        name="downPayment"
         type="number"
-        min="1"
+        min="0"
         step="1"
+        placeholder="5000"
+        addonBefore="RM"
         required
       />
+      <Field label="Tenure (number of years)">
+        <Select
+          value={values.tenure}
+          onChange={val => setFieldValue('tenure', val)}
+          id="tenure"
+        >
+          {createNumberArray(9, 1).map(numOfYear => (
+            <Select.Option value={numOfYear}>{numOfYear}</Select.Option>
+          ))}
+        </Select>
+      </Field>
     </>
   );
 }
@@ -241,7 +265,8 @@ const initialValues: FormValues = {
   company: '',
   companyHrNumber: '',
   salary: '',
-  loadAmount: '',
+  carPrice: '',
+  downPayment: '',
   tenure: '',
   icImage: '',
   licenseImage: '',
@@ -304,7 +329,11 @@ function LoanForm() {
               <EmploymentDetails values={values} handleChange={handleChange} />
             )}
             {step === 2 && (
-              <LoanDetails values={values} handleChange={handleChange} />
+              <LoanDetails
+                values={values}
+                handleChange={handleChange}
+                setFieldValue={setFieldValue}
+              />
             )}
             {step === 3 && (
               <SupportingDocuments setFieldValue={setFieldValue} />
