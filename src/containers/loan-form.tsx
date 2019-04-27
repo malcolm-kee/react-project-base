@@ -354,7 +354,7 @@ function LoanForm() {
           <Step title="Personal" />
           <Step title="Employment" />
           <Step title="Loan" />
-          <Step title="Supporting Documents" />
+          <Step title="Documents" description="Supporting Documents" />
           <Step title="Summary" />
           <Step title="Complete" />
         </Steps>
