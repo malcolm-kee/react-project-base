@@ -1,4 +1,4 @@
-import { Button, Form, Select, Spin, Steps } from 'antd';
+import { Button, Form, List, Select, Steps } from 'antd';
 import { Formik } from 'formik';
 import * as React from 'react';
 import { Field } from '../components/field';
@@ -9,6 +9,7 @@ import { Toolbar } from '../components/toolbar';
 import { States } from '../constants/lov';
 import { FormValues } from '../constants/type';
 import { createNumberArray } from '../lib/fn';
+import { saveForm } from '../services/form-service';
 
 const Step = Steps.Step;
 
@@ -69,6 +70,7 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
             name="postalCode"
             autoComplete="postal-code"
             onChange={handleChange}
+            required
           />
           <Input
             value={values.city}
@@ -77,6 +79,7 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
             name="city"
             autoComplete="address-level2"
             onChange={handleChange}
+            required
           />
         </InputGroup>
         <Select
@@ -195,7 +198,7 @@ function LoanDetails({
         addonBefore="RM"
         required
       />
-      <Field label="Tenure (number of years)">
+      <Field label="Tenure (number of years)" required>
         <Select
           value={values.tenure}
           onChange={val => setFieldValue('tenure', val)}
@@ -250,10 +253,61 @@ function SupportingDocuments({ setFieldValue }: any) {
   );
 }
 
+const Item = List.Item;
+
+const imgStyles: React.CSSProperties = {
+  maxWidth: '80vw',
+  display: 'block'
+};
+
+const Summary: React.FC<{ values: FormValues }> = ({ values }) => (
+  <div>
+    <List renderItem={() => null}>
+      <Item>Name: {values.name}</Item>
+      <Item>NRIC/Passport: {values.id}</Item>
+      <Item>
+        Addresses: {values.addressLine1}
+        <br />
+        {values.addressLine2}
+        <br />
+        {values.addressLine3}
+        <br />
+        {values.postalCode}, {values.city}, {values.state}
+      </Item>
+      <Item>Mobile: {values.mobileNumber}</Item>
+      <Item>Email: {values.email || 'Not Provided'}</Item>
+      <Item>
+        Company: {values.company} ({values.companyHrNumber})
+      </Item>
+      <Item>Salary: {values.salary}</Item>
+      <Item>Car Price: RM {values.carPrice}</Item>
+      <Item>Down Payment: RM {values.downPayment}</Item>
+      <Item>Tenure: {values.tenure} year(s)</Item>
+      <Item>
+        IC: <img src={values.icImage} style={imgStyles} />
+      </Item>
+      <Item>
+        License: <img src={values.licenseImage} style={imgStyles} />
+      </Item>
+      <Item>
+        Salary Slips: <br />
+        {values.salarySlipFor3MonthsImages.map((imgSrc, index) => (
+          <img src={imgSrc} key={index} style={imgStyles} />
+        ))}
+      </Item>
+      <Item>
+        Saving statements: <br />
+        {values.savingStatementsFor3MonthsImages.map((imgSrc, index) => (
+          <img src={imgSrc} key={index} style={imgStyles} />
+        ))}
+      </Item>
+    </List>
+  </div>
+);
+
 const initialValues: FormValues = {
   name: '',
   id: '',
-  date: '',
   addressLine1: '',
   addressLine2: '',
   addressLine3: '',
@@ -308,9 +362,7 @@ function LoanForm() {
         initialValues={initialValues}
         onSubmit={values => {
           if (step === 4) {
-            displaySuccessText(
-              `This is the value: ${JSON.stringify(values, null, 2)}`
-            );
+            saveForm(values).then(() => displaySuccessText('Form submitted'));
           } else {
             next();
           }
@@ -338,14 +390,7 @@ function LoanForm() {
             {step === 3 && (
               <SupportingDocuments setFieldValue={setFieldValue} />
             )}
-            {step === 4 && (
-              <div>
-                <h2>Application Result</h2>
-                <p>
-                  Coming soon <Spin />
-                </p>
-              </div>
-            )}
+            {step === 4 && <Summary values={values} />}
             <Toolbar justifyContent="space-between" flexFlow="row-reverse">
               <Button type="primary" htmlType="submit">
                 {step === 4 ? 'Submit' : 'Next'}

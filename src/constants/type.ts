@@ -1,7 +1,6 @@
 export interface FormValues {
   name: string;
   id: string;
-  date: string;
   addressLine1: string;
   addressLine2: string;
   addressLine3: string;
