@@ -1,3 +1,5 @@
+import { getId } from '../lib/id';
+
 const getStorage = () => import(/* webpackChunkName: "storage" */ './storage');
 
 export const uploadImage = (
@@ -6,7 +8,7 @@ export const uploadImage = (
   onProgress?: (pct: number) => void
 ) =>
   getStorage().then(({ uploadImage }) =>
-    uploadImage(imageName, file, onProgress)
+    uploadImage(String(getId()) + imageName, file, onProgress)
   );
 
 export const removeImage = (imageName: string) =>

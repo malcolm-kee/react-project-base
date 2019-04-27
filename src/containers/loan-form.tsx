@@ -1,4 +1,4 @@
-import { Button, Form, List, Select, Steps, Icon } from 'antd';
+import { Button, Form, Icon, List, Select, Steps } from 'antd';
 import { Formik } from 'formik';
 import * as React from 'react';
 import { Field } from '../components/field';
@@ -17,7 +17,7 @@ const getMessage = () =>
   import(/* webpackChunkName: "message" */ '../components/message');
 
 const displaySuccessText = (text: string) =>
-  getMessage().then(({ default: message }) => message.success(text));
+  getMessage().then(({ displaySuccessText }) => displaySuccessText(text));
 
 function PersonalDetails({ values, handleChange, setFieldValue }: any) {
   return (
@@ -43,24 +43,10 @@ function PersonalDetails({ values, handleChange, setFieldValue }: any) {
         <Input
           value={values.addressLine1}
           name="addressLine1"
-          placeholder="Line 1"
+          placeholder="Street Address"
           onChange={handleChange}
           autoComplete="street-address"
           required
-        />
-        <Input
-          value={values.addressLine2}
-          placeholder="Line 2"
-          name="addressLine2"
-          autoComplete="address-line1"
-          onChange={handleChange}
-        />
-        <Input
-          value={values.addressLine3}
-          placeholder="Line 3"
-          autoComplete="address-line2"
-          name="addressLine3"
-          onChange={handleChange}
         />
         <InputGroup compact>
           <Input
@@ -175,7 +161,7 @@ function LoanDetails({
       <h2>Loan Details</h2>
       <TextField
         label="Car Price"
-        value={values.carPrice}
+        value={values.carPrice || ''}
         onChange={handleChange}
         name="carPrice"
         type="number"
@@ -188,7 +174,7 @@ function LoanDetails({
       />
       <TextField
         label="Downpayment (min 10 % of car price)"
-        value={values.downPayment}
+        value={values.downPayment || ''}
         onChange={handleChange}
         name="downPayment"
         type="number"
@@ -319,9 +305,9 @@ const initialValues: FormValues = {
   company: '',
   companyHrNumber: '',
   salary: '',
-  carPrice: '',
-  downPayment: '',
-  tenure: '',
+  carPrice: 0,
+  downPayment: 0,
+  tenure: 0,
   icImage: '',
   licenseImage: '',
   salarySlipFor3MonthsImages: [],

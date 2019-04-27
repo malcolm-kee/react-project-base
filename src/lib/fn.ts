@@ -16,3 +16,11 @@ export const createNumberArray = (length: number, startFrom = 0) => {
 };
 
 export function noop() {}
+
+export function isNil(val: any): val is undefined | null {
+  return typeof val === 'undefined' || val === null;
+}
+
+export function isDefined<T>(val: T | undefined | null): val is T {
+  return !isNil(val);
+}

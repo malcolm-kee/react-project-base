@@ -12,11 +12,28 @@ export interface FormValues {
   company: string;
   companyHrNumber: string;
   salary: string;
-  carPrice: string;
-  downPayment: string;
-  tenure: string;
+  carPrice: number;
+  downPayment: number;
+  tenure: number;
   icImage: string;
   licenseImage: string;
   salarySlipFor3MonthsImages: string[];
   savingStatementsFor3MonthsImages: string[];
 }
+
+export interface LoanApproval {
+  approved: boolean | null;
+  approvedLoanAmount: number;
+  approvedTenure: number;
+}
+
+export type Bank = 'hong-leong' | 'cimb' | 'maybank' | 'public-bank';
+
+export interface LoanApplication extends FormValues {
+  hongLeongBankApproval: LoanApproval;
+  cimbBankApproval: LoanApproval;
+  mayBankApproval: LoanApproval;
+  publicBankApproval: LoanApproval;
+}
+
+export type LoanApplicationRecord = FormValues & LoanApproval;

@@ -12,7 +12,11 @@ module.exports = () => ({
   devtool: 'inline-source-map',
   devServer: {
     port: 9200,
-    hot: true
+    hot: true,
+    historyApiFallback: true
   },
-  plugins: [new webpack.ProgressPlugin(), new webpack.HotModuleReplacementPlugin()]
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new webpack.HotModuleReplacementPlugin()
+  ]
 });
