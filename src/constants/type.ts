@@ -25,6 +25,7 @@ export interface LoanApproval {
   approved: boolean | null;
   approvedLoanAmount: number;
   approvedTenure: number;
+  acceptedByCustomer?: boolean;
 }
 
 export type Bank = 'hong-leong' | 'cimb' | 'maybank' | 'public-bank';
