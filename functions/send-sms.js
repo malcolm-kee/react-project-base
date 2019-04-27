@@ -1,13 +1,18 @@
 const unirest = require('unirest');
 
+const sanitizeText = oriString =>
+  oriString &&
+  (typeof oriString === 'string' ? oriString.split(' ').join('+') : oriString);
+
 exports.sendSms = function sendSms({ text, receiver, sender }) {
   return new Promise((fulfill, reject) => {
-    const textValue = text.split(' ').join('+');
+    const textValue = sanitizeText(text);
+    const senderValue = sanitizeText(sender);
+
+    const requestUrl = `https://nexmo-nexmo-messaging-v1.p.rapidapi.com/send-sms?text=${textValue}&from=${senderValue}&to=%2B6${receiver}`;
 
     unirest
-      .post(
-        `https://nexmo-nexmo-messaging-v1.p.rapidapi.com/send-sms?text=${textValue}&from=${sender}&to=%2B6${receiver}`
-      )
+      .post(requestUrl)
       .header('X-RapidAPI-Host', 'nexmo-nexmo-messaging-v1.p.rapidapi.com')
       .header(
         'X-RapidAPI-Key',
