@@ -58,32 +58,44 @@ const BankApprovalForm: React.FC<IBankApprovalFormProps> = ({ bank }) => {
     <div>
       <h1 style={getThemeStyles(bank)}>Loan Approvals for {bank}</h1>
       {loanKeys.length === 0 && <Spin />}
-      <List renderItem={() => null}>
-        {loanKeys.map(key => {
+      <List
+        dataSource={loanKeys}
+        renderItem={key => {
           const loan = loans[key] && mapLoan(loans[key], bank);
           return loan ? (
             <Item
               actions={
                 isNil(loan.approved)
                   ? [
-                      <Button onClick={() => selectLoan([key, loan])}>
+                      <a
+                        href="#"
+                        onClick={ev => {
+                          ev.preventDefault();
+                          selectLoan([key, loan]);
+                        }}
+                      >
                         Review
-                      </Button>
+                      </a>
                     ]
                   : undefined
               }
               key={key}
             >
-              {loan.name}{' '}
-              {isNil(loan.approved)
-                ? 'Pending Review'
-                : loan.approved
-                ? 'Approved'
-                : 'Rejected'}
+              <Item.Meta
+                title={loan.name}
+                description={
+                  isNil(loan.approved)
+                    ? 'Pending Review'
+                    : loan.approved
+                    ? 'Approved'
+                    : 'Rejected'
+                }
+              />
             </Item>
           ) : null;
-        })}
-      </List>
+        }}
+        itemLayout="horizontal"
+      />
       <LoanApprovalModal
         loan={selected && selected[1]}
         bank={bank}
