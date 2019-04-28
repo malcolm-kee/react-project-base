@@ -9,7 +9,11 @@ const database = firebase.database();
 export const formDb = database.ref('forms');
 
 export const saveLoanApplication = (values: LoanApplication) => {
-  return formDb.child(String(getId())).set(values);
+  const id = String(getId());
+  return formDb
+    .child(id)
+    .set(values)
+    .then(() => id);
 };
 
 export const processLoanApplication = (

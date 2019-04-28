@@ -10,6 +10,7 @@ import { States } from '../constants/lov';
 import { FormValues } from '../constants/type';
 import { createNumberArray } from '../lib/fn';
 import { saveForm } from '../services/form-service';
+import { Link } from 'react-router-dom';
 
 const Step = Steps.Step;
 
@@ -331,6 +332,7 @@ function useStepper(initialStep = 0) {
 
 function LoanForm() {
   const { step, next, prev } = useStepper();
+  const [formId, setFormId] = React.useState('');
 
   return (
     <div>
@@ -350,7 +352,8 @@ function LoanForm() {
         onSubmit={(values, actions) => {
           if (step === 4) {
             saveForm(values)
-              .then(() => {
+              .then(formId => {
+                setFormId(formId);
                 displaySuccessText('Form submitted');
                 next();
                 actions.setSubmitting(false);
@@ -399,6 +402,11 @@ function LoanForm() {
                   style={{ color: 'green', fontSize: '3rem' }}
                 />
                 <p>Wait for our good news!</p>
+                <p>
+                  You can go <Link to={`/loan-status/${formId}`}>here</Link> to
+                  track the status. The link has been sent to your mobile number
+                  as well.
+                </p>
               </div>
             )}
             {step < 5 && (
