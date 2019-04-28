@@ -26,12 +26,14 @@ export const LoanApprovalModal: React.FC<LoanApprovalModalProps> = ({
 }) => {
   const [approvedAmount, setAmount] = React.useState<number | null>(null);
   const [approvedTenure, setTenure] = React.useState<number | null>(null);
+  const [interestRate, setInterestRate] = React.useState<number | null>(null);
 
   function reject() {
     processLoan(loanId as string, bank, {
       approved: false,
       approvedLoanAmount: 0,
-      approvedTenure: 0
+      approvedTenure: 0,
+      interestRate: 0
     }).then(() => {
       onDismiss();
       displaySuccessText('Loan Rejected!');
@@ -42,7 +44,8 @@ export const LoanApprovalModal: React.FC<LoanApprovalModalProps> = ({
     processLoan(loanId as string, bank, {
       approved: true,
       approvedLoanAmount: approvedAmount as number,
-      approvedTenure: approvedTenure as number
+      approvedTenure: approvedTenure as number,
+      interestRate: interestRate as number
     }).then(() => {
       onDismiss();
       displaySuccessText('Loan Approved');
@@ -92,6 +95,18 @@ export const LoanApprovalModal: React.FC<LoanApprovalModalProps> = ({
             ))}
           </Select>
         </Field>
+        <TextField
+          label="Interest Rate"
+          name="interestRate"
+          type="number"
+          min={0}
+          value={interestRate || ''}
+          onChangeValue={val =>
+            val ? setInterestRate(Number(val)) : setInterestRate(null)
+          }
+          suffix="%"
+          required
+        />
         <div>
           <Button onClick={reject} type="danger">
             Reject

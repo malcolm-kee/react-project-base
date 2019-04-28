@@ -76,28 +76,37 @@ const ApprovalStatusCard: React.FC<{
       }
     >
       {approval && (
-        <Row gutter={8}>
-          <Col sm={12} xs={24}>
-            <Statistic
-              title="Approved Amount"
-              value={isLoanApproved ? approval.approvedLoanAmount : 'N/A'}
-              prefix={isLoanApproved ? 'RM' : undefined}
-            />
-          </Col>
-          <Col sm={12} xs={24}>
-            <Statistic
-              title="Approved Tenure"
-              value={isLoanApproved ? approval.approvedTenure : 'N/A'}
-              suffix={
-                isLoanApproved
-                  ? approval.approvedTenure > 1
-                    ? 'years'
-                    : 'year'
-                  : undefined
-              }
-            />
-          </Col>
-        </Row>
+        <>
+          <Row gutter={8}>
+            <Col lg={8} sm={12} xs={24}>
+              <Statistic
+                title="Approved Amount"
+                value={isLoanApproved ? approval.approvedLoanAmount : 'N/A'}
+                prefix={isLoanApproved ? 'RM' : undefined}
+              />
+            </Col>
+            <Col lg={8} sm={12} xs={24}>
+              <Statistic
+                title="Approved Tenure"
+                value={isLoanApproved ? approval.approvedTenure : 'N/A'}
+                suffix={
+                  isLoanApproved
+                    ? approval.approvedTenure > 1
+                      ? 'years'
+                      : 'year'
+                    : undefined
+                }
+              />
+            </Col>
+            <Col lg={8} sm={12} xs={24}>
+              <Statistic
+                title="Interest Rate"
+                value={isLoanApproved ? approval.interestRate : 'N/A'}
+                suffix={isLoanApproved ? '%' : undefined}
+              />
+            </Col>
+          </Row>
+        </>
       )}
     </Card>
   );
@@ -153,7 +162,7 @@ const ApprovalStatusOverview: React.FC<ApprovalStatusOverviewProps> = ({
     <div>
       <h2>Approval Overview</h2>
       <Row gutter={8}>
-        <Col lg={8} md={12} xs={24}>
+        <Col md={12} xs={24}>
           <ApprovalStatusCard
             bank="Hong Leong Bank"
             approval={loan && loan.hongLeongBankApproval}
@@ -161,7 +170,7 @@ const ApprovalStatusOverview: React.FC<ApprovalStatusOverviewProps> = ({
             isLoanAccepted={isAccepted}
           />
         </Col>
-        <Col lg={8} md={12} xs={24}>
+        <Col md={12} xs={24}>
           <ApprovalStatusCard
             bank="CIMB Bank"
             approval={loan && loan.cimbBankApproval}
@@ -169,7 +178,7 @@ const ApprovalStatusOverview: React.FC<ApprovalStatusOverviewProps> = ({
             isLoanAccepted={isAccepted}
           />
         </Col>
-        <Col lg={8} md={12} xs={24}>
+        <Col md={12} xs={24}>
           <ApprovalStatusCard
             bank="Maybank"
             approval={loan && loan.mayBankApproval}
@@ -177,7 +186,7 @@ const ApprovalStatusOverview: React.FC<ApprovalStatusOverviewProps> = ({
             isLoanAccepted={isAccepted}
           />
         </Col>
-        <Col lg={8} md={12} xs={24}>
+        <Col md={12} xs={24}>
           <ApprovalStatusCard
             bank="Public Bank"
             approval={loan && loan.publicBankApproval}

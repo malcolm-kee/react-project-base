@@ -5,7 +5,8 @@ const getDb = () => import(/* webpackChunkName: "db" */ './db');
 const defaultApprovalValue: LoanApproval = {
   approved: null,
   approvedLoanAmount: 0,
-  approvedTenure: 0
+  approvedTenure: 0,
+  interestRate: 0
 };
 
 export const saveForm = (values: FormValues) =>

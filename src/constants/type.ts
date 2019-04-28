@@ -25,6 +25,7 @@ export interface LoanApproval {
   approved: boolean | null;
   approvedLoanAmount: number;
   approvedTenure: number;
+  interestRate: number;
   acceptedByCustomer?: boolean;
 }
 
