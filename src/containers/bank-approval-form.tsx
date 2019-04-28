@@ -1,4 +1,4 @@
-import { Button, List, Spin } from 'antd';
+import { List } from 'antd';
 import * as React from 'react';
 import { getApprovalKey, getThemeStyles } from '../constants/mapping';
 import {
@@ -57,9 +57,9 @@ const BankApprovalForm: React.FC<IBankApprovalFormProps> = ({ bank }) => {
   return (
     <div>
       <h1 style={getThemeStyles(bank)}>Loan Approvals for {bank}</h1>
-      {loanKeys.length === 0 && <Spin />}
       <List
         dataSource={loanKeys}
+        loading={loanKeys.length === 0}
         renderItem={key => {
           const loan = loans[key] && mapLoan(loans[key], bank);
           return loan ? (
