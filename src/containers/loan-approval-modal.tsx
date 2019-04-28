@@ -27,29 +27,38 @@ export const LoanApprovalModal: React.FC<LoanApprovalModalProps> = ({
   const [approvedAmount, setAmount] = React.useState<number | null>(null);
   const [approvedTenure, setTenure] = React.useState<number | null>(null);
   const [interestRate, setInterestRate] = React.useState<number | null>(null);
+  const [busy, setIsBusy] = React.useState(false);
 
   function reject() {
+    setIsBusy(true);
     processLoan(loanId as string, bank, {
       approved: false,
       approvedLoanAmount: 0,
       approvedTenure: 0,
       interestRate: 0
-    }).then(() => {
-      onDismiss();
-      displaySuccessText('Loan Rejected!');
-    });
+    })
+      .then(() => {
+        setIsBusy(false);
+        onDismiss();
+        displaySuccessText('Loan Rejected!');
+      })
+      .catch(() => setIsBusy(false));
   }
 
   function approve() {
+    setIsBusy(true);
     processLoan(loanId as string, bank, {
       approved: true,
       approvedLoanAmount: approvedAmount as number,
       approvedTenure: approvedTenure as number,
       interestRate: interestRate as number
-    }).then(() => {
-      onDismiss();
-      displaySuccessText('Loan Approved');
-    });
+    })
+      .then(() => {
+        setIsBusy(false);
+        onDismiss();
+        displaySuccessText('Loan Approved');
+      })
+      .catch(() => setIsBusy(false));
   }
 
   React.useEffect(() => {
@@ -67,6 +76,9 @@ export const LoanApprovalModal: React.FC<LoanApprovalModalProps> = ({
       title="Review Loan"
       visible={!!loan}
       onOk={approve}
+      okButtonProps={{
+        disabled: !approvedAmount || !approvedTenure || !interestRate || busy
+      }}
       onCancel={onDismiss}
       okText="Approve"
     >
@@ -77,6 +89,7 @@ export const LoanApprovalModal: React.FC<LoanApprovalModalProps> = ({
           type="number"
           min={0}
           value={approvedAmount || ''}
+          disabled={busy}
           onChangeValue={val =>
             val ? setAmount(Number(val)) : setAmount(null)
           }
@@ -87,6 +100,7 @@ export const LoanApprovalModal: React.FC<LoanApprovalModalProps> = ({
             value={approvedTenure}
             onChange={val => setTenure(val)}
             id="tenure"
+            disabled={busy}
           >
             {createNumberArray(9, 1).map(numOfYear => (
               <Select.Option value={numOfYear} key={numOfYear}>
@@ -99,6 +113,7 @@ export const LoanApprovalModal: React.FC<LoanApprovalModalProps> = ({
           label="Interest Rate"
           name="interestRate"
           type="number"
+          disabled={busy}
           min={0}
           value={interestRate || ''}
           onChangeValue={val =>
@@ -108,7 +123,7 @@ export const LoanApprovalModal: React.FC<LoanApprovalModalProps> = ({
           required
         />
         <div>
-          <Button onClick={reject} type="danger">
+          <Button onClick={reject} type="danger" disabled={busy}>
             Reject
           </Button>
         </div>
