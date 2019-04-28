@@ -25,6 +25,13 @@ const getApprovalStatusColor = (approval: LoanApproval | null) =>
     ? '#87d068'
     : 'red';
 
+const getRepaymentAmount = (approval: LoanApproval) =>
+  (approval.approvedLoanAmount *
+    approval.interestRate *
+    approval.approvedTenure) /
+  100 /
+  (approval.approvedTenure * 12);
+
 const isApproved = (approval: LoanApproval | null) =>
   !!(approval && approval.approved);
 
@@ -106,6 +113,16 @@ const ApprovalStatusCard: React.FC<{
               />
             </Col>
           </Row>
+          <Row>
+            <Col lg={{ span: 8, push: 8 }} sm={{ span: 12, push: 6 }} xs={24}>
+              <Statistic
+                title="Monthly Repayment"
+                value={isLoanApproved ? getRepaymentAmount(approval) : 'N/A'}
+                prefix={isLoanApproved ? 'RM' : undefined}
+                precision={2}
+              />
+            </Col>
+          </Row>
         </>
       )}
     </Card>
@@ -160,7 +177,9 @@ const ApprovalStatusOverview: React.FC<ApprovalStatusOverviewProps> = ({
 
   return (
     <div>
-      <h2>Approval Overview</h2>
+      <h2 style={{ padding: 8 }}>
+        Approval Overview {loan && `for ${loan.name}`}
+      </h2>
       <Row gutter={8}>
         <Col md={12} xs={24}>
           <ApprovalStatusCard
