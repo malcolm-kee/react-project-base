@@ -26,10 +26,11 @@ const getApprovalStatusColor = (approval: LoanApproval | null) =>
     : 'red';
 
 const getRepaymentAmount = (approval: LoanApproval) =>
-  (approval.approvedLoanAmount *
-    approval.interestRate *
-    approval.approvedTenure) /
-  100 /
+  (approval.approvedLoanAmount +
+    (approval.approvedLoanAmount *
+      approval.interestRate *
+      approval.approvedTenure) /
+      100) /
   (approval.approvedTenure * 12);
 
 const isApproved = (approval: LoanApproval | null) =>
